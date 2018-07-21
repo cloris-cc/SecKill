@@ -15,7 +15,10 @@ public class GlobalExceptionController {
 
 	@ExceptionHandler(value = Exception.class)
 	public Result<String> exceptionHandler(HttpServletRequest request, Exception e) {
-		if (e instanceof BindException) {
+		if (e instanceof GlobalException) { // 处理GlobalException全局异常
+			CodeMessage message = ((GlobalException) e).getCodeMessage();
+			return Result.error(message);
+		} else if (e instanceof BindException) { // 处理参数绑定异常
 			String defaultMessage = ((BindException) e).getAllErrors().get(0).getDefaultMessage();
 			return Result.error(CodeMessage.BIND_ERROR.fillArgs(defaultMessage));
 		} else {

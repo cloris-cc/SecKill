@@ -3,7 +3,6 @@ package org.cloris.controller;
 import javax.validation.Valid;
 
 import org.cloris.service.UserService;
-import org.cloris.vo.CodeMessage;
 import org.cloris.vo.LoginInfo;
 import org.cloris.vo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +27,7 @@ public class LoginController {
 	public Result<Boolean> login(@Valid LoginInfo loginInfo) {
 		System.out.println(loginInfo);
 		// 参数校验,验证手机号码和表单密码
-		// 用 JSR303 
+		// 用 JSR303
 //		String formPass = loginInfo.getPassword();
 //		String mobile = loginInfo.getMobile();
 //		if (StringUtils.isEmpty(formPass)) {
@@ -41,12 +40,8 @@ public class LoginController {
 //			return Result.error(CodeMessage.MOBILE_WRONG);
 //		}
 		// 登录
-		CodeMessage codeMessage = userService.login(loginInfo);
-		if (codeMessage.getCode() == 200) {
-			return Result.success(true);
-		} else {
-			return Result.error(codeMessage);
-		}
+		userService.login(loginInfo);
+		return Result.success(true);
 	}
 
 }
