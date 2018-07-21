@@ -1,5 +1,6 @@
 package org.cloris.controller;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.cloris.service.UserService;
@@ -22,25 +23,14 @@ public class LoginController {
 		return "login";
 	}
 
+	/**
+	 * 处理登录请求
+	 */
 	@PostMapping("/login")
 	@ResponseBody
-	public Result<Boolean> login(@Valid LoginInfo loginInfo) {
+	public Result<Boolean> login(HttpServletResponse response, @Valid LoginInfo loginInfo) {
 		System.out.println(loginInfo);
-		// 参数校验,验证手机号码和表单密码
-		// 用 JSR303
-//		String formPass = loginInfo.getPassword();
-//		String mobile = loginInfo.getMobile();
-//		if (StringUtils.isEmpty(formPass)) {
-//			return Result.error(CodeMessage.PASSWORD_EMPTY);
-//		}
-//		if (StringUtils.isEmpty(mobile)) {
-//			return Result.error(CodeMessage.MOBILE_EMPTY);
-//		}
-//		if (!ValidatorUtil.isMobile(mobile)) {
-//			return Result.error(CodeMessage.MOBILE_WRONG);
-//		}
-		// 登录
-		userService.login(loginInfo);
+		userService.login(response, loginInfo);
 		return Result.success(true);
 	}
 

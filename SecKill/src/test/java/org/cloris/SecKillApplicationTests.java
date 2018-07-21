@@ -18,15 +18,17 @@ public class SecKillApplicationTests {
 	@Autowired
 	StringRedisTemplate stringTemplate;
 
+//	@Autowired
+//	RedisTemplate<Object, Object> redisTemplate;
+
 	@Autowired
-	RedisTemplate<Object, Object> redisTemplate;
+	RedisTemplate<String, Object> template;
 
 //	@Test
 	public void contextLoads() {
 		System.out.println(stringTemplate.opsForValue().get("k2"));
 
-
-		System.out.println("---------" + redisTemplate.opsForValue().get("user"));
+//		System.out.println("---------" + redisTemplate.opsForValue().get("user"));
 
 	}
 
@@ -36,10 +38,16 @@ public class SecKillApplicationTests {
 		System.out.println(MD5Util.inputPassToDbPass("123456", "1a2b3c4d"));
 	}
 
-	@Test
+//	@Test
 	public void testValidatorUtil() {
 		System.out.println(ValidatorUtil.isMobile("18912341234"));
 		System.out.println(ValidatorUtil.isMobile("abc"));
+	}
+
+	@Test
+	public void testTemplate() {
+		template.opsForValue().set("k1", "v1");
+		System.out.println(template.opsForValue().get("k1"));
 	}
 
 }
