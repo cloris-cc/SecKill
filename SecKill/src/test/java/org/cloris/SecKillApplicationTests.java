@@ -1,7 +1,7 @@
 package org.cloris;
 
-import org.cloris.domain.User;
 import org.cloris.utils.MD5Util;
+import org.cloris.utils.ValidatorUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,18 +25,21 @@ public class SecKillApplicationTests {
 	public void contextLoads() {
 		System.out.println(stringTemplate.opsForValue().get("k2"));
 
-		User user = new User();
-		user.setId(3);
-		user.setName("小红");
-		redisTemplate.opsForValue().set("user", user);
+
 		System.out.println("---------" + redisTemplate.opsForValue().get("user"));
 
 	}
 
-	@Test
+//	@Test
 	public void test() {
 		System.out.println(MD5Util.md5("123456"));
 		System.out.println(MD5Util.inputPassToDbPass("123456", "1a2b3c4d"));
+	}
+
+	@Test
+	public void testValidatorUtil() {
+		System.out.println(ValidatorUtil.isMobile("18912341234"));
+		System.out.println(ValidatorUtil.isMobile("abc"));
 	}
 
 }

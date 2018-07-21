@@ -1,18 +1,21 @@
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql:///test
+    url: jdbc:mysql:///sec_kill
     username: root
     password: 123456
   thymeleaf:
     cache: false
   redis:
     url: redis://localhost:6379
+  jpa:
+    show-sql: true
     
     
 mybatis: 
-  configuration:
+  configuration: 
     map-underscore-to-camel-case: true
   type-aliases-package: org.cloris.domain
   mapper-locations:
   - classpath:mapper/*.xml
+  

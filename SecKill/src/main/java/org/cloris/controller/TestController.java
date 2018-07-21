@@ -43,10 +43,5 @@ public class TestController {
 		return Result.success(users);
 	}
 
-	@GetMapping("/login")
-	public String login() {
-
-		return "login";
-	}
 
 }
