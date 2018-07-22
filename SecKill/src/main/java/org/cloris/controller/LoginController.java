@@ -18,6 +18,9 @@ public class LoginController {
 	@Autowired
 	UserService userService;
 
+	/**
+	 * 跳转页面
+	 */
 	@GetMapping("/")
 	public String index() {
 		return "login";

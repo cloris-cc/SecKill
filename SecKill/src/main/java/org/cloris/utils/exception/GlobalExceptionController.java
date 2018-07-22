@@ -22,6 +22,7 @@ public class GlobalExceptionController {
 			String defaultMessage = ((BindException) e).getAllErrors().get(0).getDefaultMessage();
 			return Result.error(CodeMessage.BIND_ERROR.fillArgs(defaultMessage));
 		} else {
+			e.printStackTrace();
 			return Result.error(CodeMessage.SERVER_ERROR);
 		}
 	}

@@ -1,4 +1,4 @@
-package org.cloris.utils;
+package org.cloris.config;
 
 import java.net.UnknownHostException;
 

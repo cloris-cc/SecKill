@@ -34,13 +34,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean login(HttpServletResponse response, LoginInfo loginInfo) {
 		if (loginInfo == null) {
-//			return CodeMessage.SERVER_ERROR;
 			throw new GlobalException(CodeMessage.SERVER_ERROR);
 		}
 		// 判断用户(手机号)是否存在
 		User user = findById(loginInfo.getMobile());
 		if (user == null) {
-//			return CodeMessage.MOBILE_NOT_EXIST;
 			throw new GlobalException(CodeMessage.MOBILE_NOT_EXIST);
 		}
 		// 验证密码
@@ -48,11 +46,17 @@ public class UserServiceImpl implements UserService {
 		String salt = user.getSalt();
 		String password = MD5Util.formPassToDBPass(formPass, salt);
 		if (!user.getPassword().equals(password)) {
-//			return CodeMessage.PASSWORD_WRONG;
 			throw new GlobalException(CodeMessage.PASSWORD_WRONG);
 		}
 
 		// 生成 Cookie, 存储到 Redis 缓存中
+		addCookie(response, user);
+
+		return true;
+	}
+
+	@Override
+	public void addCookie(HttpServletResponse response, User user) {
 		String token = UUIDUtil.uuid();
 		System.out.println("-----token: " + token);
 		System.out.println("-----user: " + user);
@@ -62,18 +66,18 @@ public class UserServiceImpl implements UserService {
 		cookie.setPath("/");
 		// 将 cookie 添加到 response 中
 		response.addCookie(cookie);
-
-		return true;
 	}
 
 	@Override
-	public User findByToken(String token) {
+	public User findByToken(HttpServletResponse response, String token) {
 		if (StringUtils.isEmpty(token)) {
 			return null;
 		} else {
-			System.out.println("1 ------: " + template.opsForValue().get("tk" + token));
-			System.out.println("2 ------: " + (User) template.opsForValue().get("tk" + token));
-			return (User) template.opsForValue().get("tk" + token);
+			User user = template.opsForValue().get("tk" + token);
+			if (user != null) { // 每次使用时重置cookie有效期
+				addCookie(response, user);
+			}
+			return user;
 		}
 	}
 
