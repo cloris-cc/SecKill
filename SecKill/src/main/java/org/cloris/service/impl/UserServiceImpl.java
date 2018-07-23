@@ -50,14 +50,15 @@ public class UserServiceImpl implements UserService {
 		}
 
 		// 生成 Cookie, 存储到 Redis 缓存中
-		addCookie(response, user);
+		String token = UUIDUtil.uuid();
+		addCookie(response, token, user);
 
 		return true;
 	}
 
 	@Override
-	public void addCookie(HttpServletResponse response, User user) {
-		String token = UUIDUtil.uuid();
+	public void addCookie(HttpServletResponse response, String token, User user) {
+//		String token = UUIDUtil.uuid();
 		System.out.println("-----token: " + token);
 		System.out.println("-----user: " + user);
 		template.opsForValue().set("tk" + token, user);
@@ -75,7 +76,7 @@ public class UserServiceImpl implements UserService {
 		} else {
 			User user = template.opsForValue().get("tk" + token);
 			if (user != null) { // 每次使用时重置cookie有效期
-				addCookie(response, user);
+				addCookie(response, token, user);
 			}
 			return user;
 		}

@@ -16,7 +16,7 @@ public interface UserService {
 	/**
 	 * 添加Cookie到Redis缓存中
 	 */
-	void addCookie(HttpServletResponse response, User user);
+	void addCookie(HttpServletResponse response, String token, User user);
 
 	/**
 	 * 通过Cookie<token>从Redis缓存中获取User
