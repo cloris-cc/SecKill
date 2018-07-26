@@ -5,8 +5,10 @@ import java.util.List;
 import org.cloris.vo.GoodsVO;
 
 public interface GoodsService {
-	
+
 	List<GoodsVO> showAll();
-	
-	GoodsVO showDetail(Long id);
+
+	GoodsVO findById(Long id);
+
+	void reduceStock(GoodsVO goods);
 }

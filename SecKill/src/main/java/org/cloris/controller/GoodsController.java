@@ -30,7 +30,7 @@ public class GoodsController {
 	public String goodsDetail(Model model, User user, @PathVariable("id") Long id) {
 		model.addAttribute("user", user);
 		// 查询商品的详细信息
-		GoodsVO goods = goodsService.showDetail(id);
+		GoodsVO goods = goodsService.findById(id);
 
 		model.addAttribute("goods", goods);
 

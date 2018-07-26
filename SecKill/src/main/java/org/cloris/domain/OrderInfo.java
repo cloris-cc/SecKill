@@ -6,13 +6,13 @@ import java.util.Date;
 import lombok.Data;
 
 @Data
-public class Order implements Serializable {
+public class OrderInfo implements Serializable {
 
 	private static final long serialVersionUID = 7115067019784178576L;
 	private Long id;
 	private Long userId;
 	private Long goodsId;
-	private String shippingAddrId;
+	private Long shippingAddrId;
 	private String goodsName;
 	private Integer goodsCount;
 	private Double goodsPrice;

@@ -17,4 +17,3 @@ mybatis:
   type-aliases-package: org.cloris.domain
   mapper-locations:
   - classpath:mapper/*.xml
-  

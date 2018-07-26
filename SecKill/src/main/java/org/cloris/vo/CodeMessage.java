@@ -21,7 +21,11 @@ public class CodeMessage {
 	public static CodeMessage MOBILE_WRONG = new CodeMessage(400213, "手机号码格式错误");
 	public static CodeMessage MOBILE_NOT_EXIST = new CodeMessage(400214, "用户不存在");
 	public static CodeMessage PASSWORD_WRONG = new CodeMessage(400215, "密码错误");
-
+	
+	// 秒杀模块
+	public static CodeMessage ACTIVITY_END = new CodeMessage(500500, "商品已经秒杀完毕");
+	public static CodeMessage REPEAT_OPERATION = new CodeMessage(500501, "不能重复秒杀");
+	
 	public CodeMessage fillArgs(Object... args) {
 		int code = this.code;
 		String message = String.format(this.message, args);
