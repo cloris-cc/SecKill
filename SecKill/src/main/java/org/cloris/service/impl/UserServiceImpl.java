@@ -63,7 +63,8 @@ public class UserServiceImpl implements UserService {
 		System.out.println("-----user: " + user);
 		template.opsForValue().set("tk" + token, user);
 		Cookie cookie = new Cookie(COOKIE_NAME, token);
-		cookie.setMaxAge(3600);
+		// Cookie生命周期为10小时
+		cookie.setMaxAge(36000);
 		cookie.setPath("/");
 		// 将 cookie 添加到 response 中
 		response.addCookie(cookie);

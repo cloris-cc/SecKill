@@ -17,6 +17,11 @@ public class GoodsController {
 	@Autowired
 	GoodsService goodsService;
 
+	/**
+	 * JMeter测试情况：
+	 * 配置：Threads-5000 Loop-10
+	 * 聚合报告：Throughput-1850
+	 */
 	@GetMapping("/goods")
 	public String goodsList(Model model, User user) {
 		model.addAttribute("user", user);
