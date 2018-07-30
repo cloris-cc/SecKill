@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
 <meta charset="UTF-8">
 <title>商品详情</title>
 
 <!-- jquery -->
-<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
 
 <link rel="stylesheet" type="text/css"
-	href="../static/bootstrap/css/bootstrap.min.css"
-	th:href="@{/bootstrap/css/bootstrap.min.css}" />
+	href="bootstrap/css/bootstrap.min.css" />
+
 
 </head>
 <body>
@@ -17,7 +18,7 @@
 	<div class="panel panel-default">
 		<div class="panel-heading">秒杀商品详情</div>
 		<div class="panel-body">
-			<span th:if="${user eq null}">
+			<span id="userTip">
 				您还没有登录，请登陆后再操作
 				<br />
 			</span>
@@ -26,47 +27,45 @@
 		<table class="table" id="goodslist">
 			<tr>
 				<td>商品名称</td>
-				<td colspan="3" th:text="${goods.name}"></td>
+				<td colspan="3" id="goodsName"></td>
 			</tr>
 			<tr>
 				<td>商品图片</td>
 				<td colspan="3">
-					<img th:src="@{${goods.image}}" width="200" height="200" />
+					<img id="goodsImg" width="200" height="200" />
 				</td>
 			</tr>
 			<tr>
 				<td>秒杀开始时间</td>
-				<td
-					th:text="${#dates.format(goods.startDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
-				<td id="miaoshaTip">
-					<input type="hidden" id="remainSeconds" th:value="${remainSeconds}" />
-					<span th:if="${status eq 0}">
-						秒杀倒计时：
-						<span id="countDown" th:text="${remainSeconds}"></span>
-						秒
-					</span>
-					<span th:if="${status eq 1}">秒杀进行中</span>
-					<span th:if="${status eq 2}">秒杀已结束</span>
+				<td id="startTime"></td>
+				<td>
+					<input type="hidden" id="remainSeconds" />
+					<span id="secTip"></span>
 				</td>
 				<td>
-					<form id="miaoshaForm" method="post" action="/secKill">
+					<!-- 
+					<form id="secForm" method="post" action="/secKill">
 						<button class="btn btn-primary btn-block" type="submit"
 							id="buyButton">立即秒杀</button>
-						<input type="hidden" name="goodsId" th:value="${goods.id}" />
+						<input type="hidden" name="goodsId" id="goodsId" />
 					</form>
 				</td>
+				 -->
+					<button class="btn btn-primary btn-block" type="button"
+						id="buyButton">立即秒杀</button>
+					<input type="hidden" name="goodsId" id="goodsId" />
 			</tr>
 			<tr>
 				<td>商品原价</td>
-				<td colspan="3" th:text="${goods.price}"></td>
+				<td colspan="3" id="goodsPrice"></td>
 			</tr>
 			<tr>
 				<td>秒杀价</td>
-				<td colspan="3" th:text="${goods.secPrice}"></td>
+				<td colspan="3" id="secPrice"></td>
 			</tr>
 			<tr>
 				<td>库存数量</td>
-				<td colspan="3" th:text="${goods.secStock}"></td>
+				<td colspan="3" id="secStock"></td>
 			</tr>
 		</table>
 	</div>
@@ -75,14 +74,56 @@
 
 <script>
 	$(function() {
-		countDown();
+		getDetail();
 	});
+	// 获取商品详情
+	function getDetail() {
+		var goodsId = g_getQueryString("goodsId");
+		$.ajax({
+			url : "/goods/" + goodsId,
+			type : "GET",
+			success : function(data) {
+				if (data.code == 200) {
+					render(data.data);
+				} else {
+					layer.msg(data.message);
+				}
+			},
+			error : function() {
+				layer.msg("客户端请求有误");
+			}
+		});
+	};
+	// 传递值
+	function render(detail) {
+		var status = detail.status;
+		var remainSeconds = detail.remainSeconds;
+		var goods = detail.goods;
+		var user = detail.user;
+
+		if (user) {
+			$("#userTip").hide();
+		}
+
+		$("#goodsName").text(goods.name);
+		$("#goodsImg").attr("src", goods.image);
+		$("#startTime").text(
+				new Date(goods.startDate).format("yyyy-MM-dd hh:mm:ss"));
+		$("#remainSeconds").val(remainSeconds);
+		$("#goodsId").val(goods.id);
+		$("#goodsPrice").text(goods.price);
+		$("#secPrice").text(goods.secPrice);
+		$("#secStock").text(goods.secStock);
+
+		countDown();
+	}
 
 	function countDown() {
 		var remainSeconds = $("#remainSeconds").val();
 		var timeout;
 		if (remainSeconds > 0) {//秒杀未开始，进行倒计时
 			$("#buyButton").attr("disabled", true);
+			$("#miaoshaTip").html("秒杀倒计时：" + remainSeconds + "秒");
 			timeout = setTimeout(function() {
 				$("#countDown").text(remainSeconds - 1);
 				$("#remainSeconds").val(remainSeconds - 1);
@@ -93,12 +134,34 @@
 			if (timeout) {
 				clearTimeout(timeout);
 			}
-			$("#miaoshaTip").html("秒杀进行中");
+			$("secTip").html("秒杀进行中");
 		} else {//秒杀已经结束
 			$("#buyButton").attr("disabled", true);
-			$("#miaoshaTip").html("秒杀已经结束");
+			$("#secTip").html("秒杀已经结束");
 		}
 	}
+
+	$("#buyButton").click(
+			function() {
+				$.ajax({
+					url : "/secKill",
+					type : "POST",
+					data : {
+						goodsId : $("#goodsId").val()
+					},
+					success : function(data) {
+						if (data.code == 200) {
+							window.location.href = "/order_detail.htm?orderId="
+									+ data.data.id;
+						} else {
+							layer.msg(data.msg);
+						}
+					},
+					error : function() {
+						layer.msg("客户端请求有误");
+					}
+				});
+			})
 </script>
 
 </html>
