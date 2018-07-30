@@ -4,12 +4,15 @@ import java.util.List;
 
 import org.cloris.domain.User;
 import org.cloris.service.GoodsService;
+import org.cloris.vo.GoodsDetailVO;
 import org.cloris.vo.GoodsVO;
+import org.cloris.vo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class GoodsController {
@@ -32,13 +35,12 @@ public class GoodsController {
 	}
 
 	@GetMapping("/goods/{id}")
-	public String goodsDetail(Model model, User user, @PathVariable("id") Long id) {
-		model.addAttribute("user", user);
+	@ResponseBody
+	public Result<GoodsDetailVO> goodsDetail(Model model, User user, @PathVariable("id") Long id) {
+//		model.addAttribute("user", user);
 		// 查询商品的详细信息
 		GoodsVO goods = goodsService.findById(id);
-
-		model.addAttribute("goods", goods);
-
+//		model.addAttribute("goods", goods);
 		long start = goods.getStartDate().getTime();
 		long end = goods.getEndDate().getTime();
 		long now = System.currentTimeMillis();
@@ -57,10 +59,11 @@ public class GoodsController {
 			status = 1;
 			remainSeconds = 0;
 		}
-
-		model.addAttribute("status", status);
-		model.addAttribute("remainSeconds", remainSeconds);
-		return "detail";
+//		model.addAttribute("status", status);
+//		model.addAttribute("remainSeconds", remainSeconds);
+		GoodsDetailVO vo = new GoodsDetailVO(status, remainSeconds, goods, user);
+//		return "goods_detail";
+		return Result.success(vo);
 	}
 
 //	@GetMapping("/goods")

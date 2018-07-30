@@ -31,10 +31,10 @@ public class LoginController {
 	 */
 	@PostMapping("/login")
 	@ResponseBody
-	public Result<Boolean> login(HttpServletResponse response, @Valid LoginInfo loginInfo) {
+	public Result<String> login(HttpServletResponse response, @Valid LoginInfo loginInfo) {
 		System.out.println(loginInfo);
-		userService.login(response, loginInfo);
-		return Result.success(true);
+		String token = userService.login(response, loginInfo);
+		return Result.success(token);
 	}
 
 }

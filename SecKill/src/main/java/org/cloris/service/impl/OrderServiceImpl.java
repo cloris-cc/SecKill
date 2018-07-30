@@ -40,12 +40,12 @@ public class OrderServiceImpl implements OrderService {
 
 
 		System.out.println(order);
-		Long orderId = orderDao.insertOrder(order);
+		orderDao.insertOrder(order);
 
 		SecOrder secOrder = new SecOrder();
 		secOrder.setGoodsId(goods.getId());
 		secOrder.setUserId(user.getId());
-		secOrder.setOrderId(orderId);
+		secOrder.setOrderId(order.getId());
 
 		orderDao.insertSecOrder(secOrder);
 

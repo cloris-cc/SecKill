@@ -11,7 +11,7 @@ public interface UserService {
 	/**
 	 * 处理登录请求
 	 */
-	boolean login(HttpServletResponse response, LoginInfo loginInfo);
+	String login(HttpServletResponse response, LoginInfo loginInfo);
 
 	/**
 	 * 添加Cookie到Redis缓存中
@@ -22,5 +22,10 @@ public interface UserService {
 	 * 通过Cookie<token>从Redis缓存中获取User
 	 */
 	User findByToken(HttpServletResponse response, String token);
+
+	/**
+	 * 修改密码
+	 */
+	Boolean updatePassword(String token, String id, String password);
 
 }

@@ -28,16 +28,39 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User findById(String id) {
-		return userDao.findById(id);
+		// 取缓存
+		User user = template.opsForValue().get(id);
+		if (user != null) {
+			return user;
+		}
+		// 取数据库
+		user = userDao.findById(id);
+		if (user != null) {
+			template.opsForValue().set(id, user);
+		}
+		return user;
+//		return userDao.findById(id);
+	}
+	
+	@Override
+	public Boolean updatePassword(String token, String id, String password) {
+		// 更新数据库
+		userDao.updatePassword(id, password);
+		// 处理缓存
+		template.delete(id);
+		template.opsForValue().set("tk" + token, userDao.findById(id));
+		return true;
 	}
 
 	@Override
-	public boolean login(HttpServletResponse response, LoginInfo loginInfo) {
+	public String login(HttpServletResponse response, LoginInfo loginInfo) {
 		if (loginInfo == null) {
 			throw new GlobalException(CodeMessage.SERVER_ERROR);
 		}
 		// 判断用户(手机号)是否存在
 		User user = findById(loginInfo.getMobile());
+//		User user = findById("18912341234");
+//		user.setId(Long.parseLong(loginInfo.getMobile()));
 		if (user == null) {
 			throw new GlobalException(CodeMessage.MOBILE_NOT_EXIST);
 		}
@@ -53,7 +76,7 @@ public class UserServiceImpl implements UserService {
 		String token = UUIDUtil.uuid();
 		addCookie(response, token, user);
 
-		return true;
+		return token;
 	}
 
 	@Override
@@ -63,8 +86,8 @@ public class UserServiceImpl implements UserService {
 		System.out.println("-----user: " + user);
 		template.opsForValue().set("tk" + token, user);
 		Cookie cookie = new Cookie(COOKIE_NAME, token);
-		// Cookie生命周期为10小时
-		cookie.setMaxAge(36000);
+		// Cookie生命周期为7天
+		cookie.setMaxAge(3600 * 24 * 7);
 		cookie.setPath("/");
 		// 将 cookie 添加到 response 中
 		response.addCookie(cookie);
@@ -82,5 +105,7 @@ public class UserServiceImpl implements UserService {
 			return user;
 		}
 	}
+
+	
 
 }
