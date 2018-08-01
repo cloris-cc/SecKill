@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <title>订单详情页面</title>
 
-<!-- jquery -->
 <script type="text/javascript" src="js/jquery.min.js"></script>
-<!-- bootstrap -->
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="layer/layer.js"></script>
 <link rel="stylesheet" type="text/css"
 	href="bootstrap/css/bootstrap.min.css" />
 
@@ -22,8 +22,7 @@
 			</tr>
 			<tr>
 				<td>商品图片</td>
-				<td colspan="2">
-					<img id="goodsImg" width="200" height="200" />
+				<td colspan="2"><img id="goodsImg" width="200" height="200" />
 				</td>
 			</tr>
 			<tr>
@@ -36,7 +35,7 @@
 			</tr>
 			<tr>
 				<td>订单状态</td>
-				<td>
+				<td id="orderStatus">
 					<!-- 
 					<span th:if="${orderInfo.status eq 0}">未支付</span>
 					<span th:if="${orderInfo.status eq 1}">待发货</span>
@@ -64,4 +63,68 @@
 
 
 </body>
+
+<script>
+
+	$(function() {
+		getOrderDetail();
+	});
+	
+	function getOrderDetail() {
+			var orderId = g_getQueryString("orderId");
+			$.ajax({
+				url : "/order/detail/" + orderId,
+				type : "GET",
+// 				data : {
+// 					orderId : orderId
+// 				},
+				success : function(data) {
+					if (data.code == 200) {
+						render(data.data);
+					} else {
+						layer.msg(data.message);
+					}
+				},
+				error : function() {
+					layer.msg("客户端请求有误");
+				}
+			});
+	}
+	
+	// 取值，渲染页面
+	function render(detail) {
+		var goods = detail.goods;
+		var order = detail.order;
+		
+		$("#goodsName").text(goods.name);
+		$("#goodsImg").attr("src", goods.image);
+		$("#orderPrice").text(order.goodsPrice);
+		$("#createDate").text(new Date(order.createDate).format("yyyy-MM-dd hh:mm:ss"));
+		// 订单状态
+		var status = "";
+		if(order.status == 0) {
+			status = "未支付";
+		}
+		if(order.status == 1) {
+			status = "待发货";
+		}
+		if(order.status == 2) {
+			status = "已发货";
+		}
+		if(order.status == 3) {
+			status = "已收货";
+		}
+		if(order.status == 4) {
+			status = "已退款";
+		}
+		if(order.status == 5) {
+			status = "已完成";
+		}
+		$("#orderStatus").text(status);
+	
+	}
+
+
+</script>
+
 </html>

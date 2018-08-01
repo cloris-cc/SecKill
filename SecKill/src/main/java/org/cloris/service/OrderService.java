@@ -10,5 +10,7 @@ public interface OrderService {
 	SecOrder findByUserIdAndGoodsId(Long userId, Long goodsId);
 
 	OrderInfo createOrder(User user, GoodsVO goods);
+
+	OrderInfo findById(Long orderId);
 	
 }

@@ -26,6 +26,9 @@ public class CodeMessage {
 	public static CodeMessage ACTIVITY_END = new CodeMessage(500500, "商品已经秒杀完毕");
 	public static CodeMessage REPEAT_OPERATION = new CodeMessage(500501, "不能重复秒杀");
 	
+	// 订单模块
+	public static CodeMessage ORDER_NOT_EXIST = new CodeMessage(500400, "订单不存在");
+	
 	public CodeMessage fillArgs(Object... args) {
 		int code = this.code;
 		String message = String.format(this.message, args);

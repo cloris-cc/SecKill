@@ -10,10 +10,15 @@ spring:
     url: redis://localhost:6379
   jpa:
     show-sql: true
-  resources:
-    cache:
-      cachecontrol:
-        max-age: 3600 # 可能被浏览器重写
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: cloris
+    password: 123456
+#  resources:
+#    cache:
+#      cachecontrol:
+#        max-age: 3600 # 可能被浏览器重写
     
 mybatis: 
   configuration: 
@@ -21,3 +26,4 @@ mybatis:
   type-aliases-package: org.cloris.domain
   mapper-locations:
   - classpath:mapper/*.xml
+  

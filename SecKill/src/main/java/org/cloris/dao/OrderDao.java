@@ -20,4 +20,7 @@ public interface OrderDao {
 
 	@Insert("insert into sec_order (user_id, goods_id, order_id) values(#{userId}, #{goodsId}, #{orderId})")
 	Long insertSecOrder(SecOrder secOrder);
+
+	@Select("select * from order_info where id = #{orderId}")
+	OrderInfo findById(Long orderId);
 }

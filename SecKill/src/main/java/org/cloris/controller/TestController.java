@@ -1,47 +1,29 @@
 package org.cloris.controller;
 
-import java.util.List;
-
-import org.cloris.dao.UserDao;
-import org.cloris.domain.User;
-import org.cloris.vo.CodeMessage;
+import org.cloris.rabbitmq.MQSender;
 import org.cloris.vo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
+@RequestMapping("/mq")
 public class TestController {
 
 	@Autowired
-	UserDao userDao;
+	MQSender sender;
 
-	@GetMapping("/test")
-	@ResponseBody
-	public Result<String> test() {
-		return Result.success("test");
+	@GetMapping("/direct")
+	public Result<String> mq() {
+		sender.send("a test message");
+		return Result.success("处理成功");
 	}
 
-	@GetMapping("/test2")
-	@ResponseBody
-	public Result<String> error() {
-		return Result.error(CodeMessage.SERVER_ERROR);
+	@GetMapping("/topic")
+	public Result<String> topic() {
+		sender.sendTopic("a test message");
+		return Result.success("处理成功");
 	}
-
-	@GetMapping("/hello")
-	public String hello(Model model) {
-		model.addAttribute("name", "cloris");
-		return "test";
-	}
-
-	@GetMapping("/users")
-	@ResponseBody
-	public Result<List<User>> list() {
-		List<User> users = userDao.findAll();
-		return Result.success(users);
-	}
-
 
 }

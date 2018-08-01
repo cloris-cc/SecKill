@@ -38,7 +38,6 @@ public class OrderServiceImpl implements OrderService {
 		order.setStatus(0);
 		order.setUserId(user.getId());
 
-
 		System.out.println(order);
 		orderDao.insertOrder(order);
 
@@ -50,6 +49,11 @@ public class OrderServiceImpl implements OrderService {
 		orderDao.insertSecOrder(secOrder);
 
 		return order;
+	}
+
+	@Override
+	public OrderInfo findById(Long orderId) {
+		return orderDao.findById(orderId);
 	}
 
 }
