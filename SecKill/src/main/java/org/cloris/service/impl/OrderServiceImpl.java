@@ -9,6 +9,7 @@ import org.cloris.domain.User;
 import org.cloris.service.OrderService;
 import org.cloris.vo.GoodsVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,9 +19,13 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired
 	OrderDao orderDao;
 
+	@Autowired
+	RedisTemplate<String, SecOrder> template;
+
 	@Override
 	public SecOrder findByUserIdAndGoodsId(Long userId, Long goodsId) {
-		return orderDao.findByUserIdAndGoodsId(userId, goodsId);
+		// 查询 Redis
+		return template.opsForValue().get(userId + "_" + goodsId);
 	}
 
 	@Override
@@ -48,6 +53,8 @@ public class OrderServiceImpl implements OrderService {
 
 		orderDao.insertSecOrder(secOrder);
 
+		template.opsForValue().set(user.getId() + "_" + goods.getId(), secOrder);
+
 		return order;
 	}
 
@@ -55,5 +62,7 @@ public class OrderServiceImpl implements OrderService {
 	public OrderInfo findById(Long orderId) {
 		return orderDao.findById(orderId);
 	}
+
+	
 
 }

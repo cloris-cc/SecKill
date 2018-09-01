@@ -2,6 +2,7 @@ package org.cloris.config;
 
 import java.net.UnknownHostException;
 
+import org.cloris.domain.SecOrder;
 import org.cloris.domain.User;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,13 +30,40 @@ public class RedisConfig {
 //		template.setDefaultSerializer(new Jackson2JsonRedisSerializer<Object>(Object.class));
 //		return template;
 //	}
-	
+
 	@Bean
-	public RedisTemplate<String, User> redisTemplate(RedisConnectionFactory redisConnectionFactory)
+	public RedisTemplate<String, User> userRedisTemplate(RedisConnectionFactory redisConnectionFactory)
 			throws UnknownHostException {
 		RedisTemplate<String, User> template = new RedisTemplate<>();
 		template.setConnectionFactory(redisConnectionFactory);
 		template.setDefaultSerializer(new Jackson2JsonRedisSerializer<User>(User.class));
 		return template;
 	}
+
+	@Bean
+	public RedisTemplate<String, SecOrder> orderInfoRedisTemplate(RedisConnectionFactory redisConnectionFactory)
+			throws UnknownHostException {
+		RedisTemplate<String, SecOrder> template = new RedisTemplate<>();
+		template.setConnectionFactory(redisConnectionFactory);
+		template.setDefaultSerializer(new Jackson2JsonRedisSerializer<SecOrder>(SecOrder.class));
+		return template;
+	}
+
+	@Bean
+	public RedisTemplate<Long, Integer> stockRedisTemplate(RedisConnectionFactory redisConnectionFactory)
+			throws UnknownHostException {
+		RedisTemplate<Long, Integer> template = new RedisTemplate<>();
+		template.setConnectionFactory(redisConnectionFactory);
+		template.setDefaultSerializer(new Jackson2JsonRedisSerializer<Integer>(Integer.class));
+		return template;
+	}
+
+	@Bean
+	public RedisTemplate<String, Boolean> goodsRedisTemplate(RedisConnectionFactory redisConnectionFactory)
+			throws UnknownHostException {
+		RedisTemplate<String, Boolean> template = new RedisTemplate<>();
+		template.setConnectionFactory(redisConnectionFactory);
+		return template;
+	}
+
 }

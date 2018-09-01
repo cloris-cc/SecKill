@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/mq")
-public class TestController {
+public class MQTestController {
 
 	@Autowired
 	MQSender sender;
@@ -25,5 +25,18 @@ public class TestController {
 		sender.sendTopic("a test message");
 		return Result.success("处理成功");
 	}
+
+	@GetMapping("/fanout")
+	public Result<String> fanout() {
+		sender.sendFanout("a test message");
+		return Result.success("处理成功");
+	}
+	
+	@GetMapping("/headers")
+	public Result<String> headers() {
+		sender.sendHeader("a test message");
+		return Result.success("处理成功");
+	}
+	
 
 }

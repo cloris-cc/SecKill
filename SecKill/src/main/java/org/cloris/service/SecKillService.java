@@ -11,4 +11,12 @@ public interface SecKillService {
 	 */
 	OrderInfo doSecKill(User user, GoodsVO goods);
 	
+	/**
+	 * 秒杀结果
+	 */
+	Long getResults(Long userId, Long goodsId);
+	
+	void setGoodsOver(Long goodsId);
+	
+	boolean getGoodsOver(Long goodsId);
 }

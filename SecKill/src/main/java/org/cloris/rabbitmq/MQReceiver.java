@@ -25,4 +25,9 @@ public class MQReceiver {
 		log.info("收到topic-2消息：" + message);
 	}
 
+	@RabbitListener(queues = MQConfig.HEADERS_QUEUE)
+	public void receiveHeaders(byte[] message) {
+		log.info("收到header队列消息：" + new String(message));
+	}
+
 }

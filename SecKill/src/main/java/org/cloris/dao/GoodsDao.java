@@ -18,5 +18,5 @@ public interface GoodsDao {
 	GoodsVO findById(Long id);
 
 	@Update("update sec_goods set sec_stock = sec_stock-1 where goods_id = #{goodsId} and sec_stock > 0")
-	void updateStock(SecGoods goods);
+	Integer updateStock(SecGoods goods);
 }

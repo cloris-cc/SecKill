@@ -39,7 +39,6 @@ public class UserServiceImpl implements UserService {
 			template.opsForValue().set(id, user);
 		}
 		return user;
-//		return userDao.findById(id);
 	}
 	
 	@Override
@@ -59,8 +58,6 @@ public class UserServiceImpl implements UserService {
 		}
 		// 判断用户(手机号)是否存在
 		User user = findById(loginInfo.getMobile());
-//		User user = findById("18912341234");
-//		user.setId(Long.parseLong(loginInfo.getMobile()));
 		if (user == null) {
 			throw new GlobalException(CodeMessage.MOBILE_NOT_EXIST);
 		}
@@ -81,7 +78,6 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void addCookie(HttpServletResponse response, String token, User user) {
-//		String token = UUIDUtil.uuid();
 		System.out.println("-----token: " + token);
 		System.out.println("-----user: " + user);
 		template.opsForValue().set("tk" + token, user);
