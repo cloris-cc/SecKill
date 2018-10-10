@@ -65,7 +65,7 @@ public class SecKillController implements InitializingBean {
 	 */
 	@PostMapping("/secKill")
 	@ResponseBody
-	public Result<Integer> secKill(Model model, User user, @RequestParam("goodsId") Long goodsId) {
+	public Result<Integer> secKill(Model model, User user, @RequestParam("goodsId") Long goodsId) throws NullPointerException {
 		model.addAttribute("user", user);
 		if (user == null) {
 			return Result.error(CodeMessage.SESSION_ERROR);

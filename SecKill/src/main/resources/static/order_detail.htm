@@ -9,7 +9,21 @@
 <script type="text/javascript" src="layer/layer.js"></script>
 <link rel="stylesheet" type="text/css"
 	href="bootstrap/css/bootstrap.min.css" />
+<style type="text/css">
+html, body {
+	height: 100%;
+	width: 100%;
+}
 
+body {
+	background: url('/img/bg2.jpg') no-repeat;
+	background-size: 100% 100%;
+}
+
+#goodslist td {
+	border-top: 1px solid #39503f61;
+}
+</style>
 </head>
 <body>
 
@@ -65,66 +79,64 @@
 </body>
 
 <script>
-
 	$(function() {
 		getOrderDetail();
 	});
-	
+
 	function getOrderDetail() {
-			var orderId = g_getQueryString("orderId");
-			$.ajax({
-				url : "/order/detail/" + orderId,
-				type : "GET",
-// 				data : {
-// 					orderId : orderId
-// 				},
-				success : function(data) {
-					if (data.code == 200) {
-						render(data.data);
-					} else {
-						layer.msg(data.message);
-					}
-				},
-				error : function() {
-					layer.msg("客户端请求有误");
+		var orderId = g_getQueryString("orderId");
+		$.ajax({
+			url : "/order/detail/" + orderId,
+			type : "GET",
+			// 				data : {
+			// 					orderId : orderId
+			// 				},
+			success : function(data) {
+				if (data.code == 200) {
+					render(data.data);
+				} else {
+					layer.msg(data.message);
 				}
-			});
+			},
+			error : function() {
+				layer.msg("客户端请求有误");
+			}
+		});
 	}
-	
+
 	// 取值，渲染页面
 	function render(detail) {
 		var goods = detail.goods;
 		var order = detail.order;
-		
+
 		$("#goodsName").text(goods.name);
 		$("#goodsImg").attr("src", goods.image);
 		$("#orderPrice").text(order.goodsPrice);
-		$("#createDate").text(new Date(order.createDate).format("yyyy-MM-dd hh:mm:ss"));
+		$("#createDate").text(
+				new Date(order.createDate).format("yyyy-MM-dd hh:mm:ss"));
 		// 订单状态
 		var status = "";
-		if(order.status == 0) {
+		if (order.status == 0) {
 			status = "未支付";
 		}
-		if(order.status == 1) {
+		if (order.status == 1) {
 			status = "待发货";
 		}
-		if(order.status == 2) {
+		if (order.status == 2) {
 			status = "已发货";
 		}
-		if(order.status == 3) {
+		if (order.status == 3) {
 			status = "已收货";
 		}
-		if(order.status == 4) {
+		if (order.status == 4) {
 			status = "已退款";
 		}
-		if(order.status == 5) {
+		if (order.status == 5) {
 			status = "已完成";
 		}
 		$("#orderStatus").text(status);
-	
+
 	}
-
-
 </script>
 
 </html>

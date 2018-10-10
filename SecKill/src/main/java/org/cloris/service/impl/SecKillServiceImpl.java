@@ -60,7 +60,7 @@ public class SecKillServiceImpl implements SecKillService {
 	}
 
 	@Override
-	public boolean getGoodsOver(Long goodsId) {
+	public boolean getGoodsOver(Long goodsId) throws NullPointerException{
 		return template.opsForValue().get("" + goodsId);
 	}
 

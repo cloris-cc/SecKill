@@ -28,4 +28,6 @@ public interface UserService {
 	 */
 	Boolean updatePassword(String token, String id, String password);
 
+	void register(LoginInfo loginInfo);
+
 }

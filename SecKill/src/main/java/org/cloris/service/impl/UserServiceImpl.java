@@ -75,6 +75,15 @@ public class UserServiceImpl implements UserService {
 
 		return token;
 	}
+	
+	@Override
+	public void register(LoginInfo loginInfo) {
+		String mobile = loginInfo.getMobile();
+		String formPass = loginInfo.getPassword();
+		String salt = "1a2b3c4d";
+		String password = MD5Util.formPassToDBPass(formPass, salt);
+		userDao.insertOne(mobile, password);
+	}
 
 	@Override
 	public void addCookie(HttpServletResponse response, String token, User user) {
@@ -101,6 +110,8 @@ public class UserServiceImpl implements UserService {
 			return user;
 		}
 	}
+
+	
 
 	
 
